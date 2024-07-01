@@ -1,0 +1,34 @@
+<form [formGroup]="myForm" (ngSubmit)="onSubmit()" #formDir="ngForm">
+    <div>
+      <label>Name</label>
+      <input type="text" formControlName="name">
+      <!-- Explicit null check -->
+      <div *ngIf=" myForm.get('name')?.touched && myForm.get('name')?.errors?.['required']  && formDir.submitted">
+        Name is required
+      </div>
+    </div>
+  
+    <div>
+      <label>Email</label>
+      <input type="email" formControlName="email">
+      <!-- Explicit null check -->
+      <div *ngIf=" myForm.get('email')?.touched && myForm.get('email')?.errors?.['required']  && formDir.submitted">
+        Email is required
+      </div>
+      <!-- Additional validation message -->
+      <div *ngIf="myForm.get('email')?.touched && myForm.get('email')?.errors?.['email']  && formDir.submitted">
+        Invalid email format
+      </div>
+    </div>
+  
+    <div formArrayName="skills">
+      <div *ngFor="let skillGroup of myForm.get('skills')?.value; let i = index" [formGroupName]="i">
+        <label>Skill {{ i + 1 }}</label>
+        <input type="text" formControlName="skillName">
+        <button type="button" (click)="removeSkill(i)" *ngIf="myForm.get('skills')?.value?.length > 1">Remove Skill</button>
+      </div>
+    </div>
+    <button type="button" (click)="addSkill()">Add Skill</button>
+  
+    <button type="submit">Submit</button>
+  </form>
